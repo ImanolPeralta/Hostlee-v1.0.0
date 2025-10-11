@@ -1,0 +1,72 @@
+<div class="product-detail">
+  <!-- Columna izquierda: imágenes -->
+  <div class="product-images">
+    <div class="main-image">
+      {{#if product.thumbnails.length}}
+        <img
+          src="{{lookup product.thumbnails 0}}"
+          alt="{{product.title}}"
+          id="mainProductImage"
+        />
+      {{else}}
+        <img src="/img/default-product.png" alt="Sin imagen" />
+      {{/if}}
+
+    </div>
+
+    {{#if product.thumbnails.length}}
+      <div class="thumbnail-gallery">
+        {{#each product.thumbnails}}
+          <img
+            src="{{this}}"
+            alt="Vista {{@index}}"
+            onclick="changeMainImage('{{this}}')"
+          />
+        {{/each}}
+      </div>
+    {{/if}}
+  </div>
+
+  <!-- Columna derecha: info -->
+  <div class="product-info">
+    <h1 class="product-title">{{product.title}}</h1>
+
+    <div class="product-meta">
+      <p class="product-category">{{product.category}}</p>
+      <p class="product-code">Código: {{product.code}}</p>
+    </div>
+
+    <p class="product-description">{{product.description}}</p>
+
+    <div class="product-price">
+      ${{product.price}}
+    </div>
+
+    <p class="product-stock">
+      <strong>Stock disponible:</strong>
+      {{product.stock}}
+    </p>
+
+    <button data-product-id="{{product._id}}" class="add-to-cart" onclick="addToCart('{{product._id}}')">
+      <i class="fa-solid fa-calendar-week fa-fade" style="color: #fff;" ></i>
+      Reservar
+    </button>
+
+    <div class="extra-info">
+      <p><i class="fa fa-calendar-check" style="color: #319795;"></i>
+        Reserva segura y garantizada</p>
+      <p><i class="fa fa-ban" style="color: #319795;"></i>
+        Cancelación flexible</p>
+      <p><i class="fa fa-headset" style="color: #319795; "></i> Atención 24/7</p>
+      <p><i class="fa-solid fa-wifi" style="color: #319795;"></i>
+        WiFi Gratis</p>
+      <p><i class="fa-solid fa-star-half-stroke fa-beat" style="color: #f6ad55;"></i>
+        4.8/5 (325 opiniones)</p>
+    </div>
+  </div>
+</div>
+<script src="/js/cart.js"></script>
+<script>
+  function changeMainImage(src) {
+  document.getElementById('mainProductImage').src = src; }
+</script>

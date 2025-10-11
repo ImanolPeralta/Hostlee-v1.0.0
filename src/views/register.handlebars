@@ -1,0 +1,85 @@
+<div class="auth-container">
+  <div class="auth-box">
+    <div class="register-left">
+      <h2>Crear cuenta</h2>
+      <form id="registerForm">
+        <div class="form-grid">
+          <input name="first_name" required placeholder="Nombre" />
+          <input name="last_name" required placeholder="Apellido" />
+        </div>
+        <input name="email" type="email" required placeholder="Correo electrónico" />
+        <input name="age" type="number" placeholder="Edad" />
+        <input name="password" type="password" required placeholder="Contraseña" />
+        <button type="submit" class="btn-register">Registrarme</button>
+      </form>
+
+      <p class="login-link">
+        ¿Ya tenés cuenta? <a href="/login">Iniciá sesión</a>
+      </p>
+    </div>
+
+    <div class="register-right">
+      <h3>¡Unite a Hostlee!</h3>
+      <p>
+        Registrate y comenzá a disfrutar de experiencias únicas de hospedaje
+        en todo el mundo. ¡Explorá, reservá y viví tu próxima aventura!
+      </p>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  document.getElementById("registerForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const data = {
+      first_name: e.target.first_name.value,
+      last_name: e.target.last_name.value,
+      email: e.target.email.value,
+      age: e.target.age.value,
+      password: e.target.password.value,
+    };
+
+    try {
+      const res = await fetch("/api/sessions/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(data),
+      });
+
+      const json = await res.json();
+
+      if (res.ok) {
+        // Mensaje de éxito con SweetAlert
+        Swal.fire({
+          title: "¡Registro exitoso!",
+          text: "Tu cuenta fue creada correctamente.",
+          icon: "success",
+          confirmButtonColor: "#4FD1C5",
+          confirmButtonText: "Aceptar",
+        }).then(() => {
+          // Redirigir al inicio o a perfil
+          window.location.href = "/";
+        });
+      } else {
+        Swal.fire({
+          title: "Error",
+          text: json.message || "No se pudo registrar el usuario.",
+          icon: "error",
+          confirmButtonColor: "#e53e3e",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        title: "Error inesperado",
+        text: "Intentalo nuevamente.",
+        icon: "error",
+        confirmButtonColor: "#e53e3e",
+      });
+    }
+  });
+</script>

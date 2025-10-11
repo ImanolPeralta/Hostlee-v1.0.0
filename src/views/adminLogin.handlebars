@@ -1,0 +1,25 @@
+<div class="auth-container admin-login">
+  <div class="auth-box admin-box">
+    <div class="admin-left">
+      <h2>Acceso Administrador</h2>
+
+      {{#if error}}
+        <div class="error-message">{{error}}</div>
+      {{/if}}
+
+      <form action="/admin/login" method="POST">
+        <input type="email" name="email" id="email" required placeholder="Correo electrónico" />
+        <input type="password" name="password" id="password" required placeholder="Contraseña" />
+        <button type="submit" class="btn-admin">Ingresar</button>
+      </form>
+    </div>
+
+    <div class="admin-right">
+      <h3>Panel de control</h3>
+      <p>
+        Accedé al panel de administración de Hostlee para gestionar usuarios,
+        alojamientos y reservas.
+      </p>
+    </div>
+  </div>
+</div>

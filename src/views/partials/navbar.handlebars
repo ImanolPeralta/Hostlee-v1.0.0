@@ -1,0 +1,64 @@
+<header class="navbar">
+  <div class="container">
+    <a href="/" class="logo">
+      <img src="/img/logo.png" alt="Hostlee logo" class="logo-img" />
+      Hostlee
+    </a>
+
+    <nav class="nav-links">
+      <a href="/">Inicio</a>
+      <a href="/about">Acerca de Nosotros</a>
+      <a href="/faq">Preguntas Frecuentes</a>
+      <a href="/contact">Contacto</a>
+    </nav>
+
+    <div class="nav-actions">
+      {{#if user}}
+        <a href="/api/carts/view" class="cart-icon" title="Carrito de compras">
+          <i class="fa-solid fa-house"></i>
+          <span class="cart-count">{{cartCount}}</span>
+        </a>
+      {{/if}}
+      {{#if user}}
+        <!-- Si el usuario está logueado -->
+        <div class="user-menu">
+          <div class="user-avatar" id="userMenuToggle">
+            {{#if user.avatar}}
+              <img src="{{user.avatar}}" alt="avatar" />
+            {{else}}
+              <span>{{user.initials}}</span>
+            {{/if}}
+          </div>
+
+          <div class="user-dropdown" id="userDropdown">
+            <a href="/profile" class="dropdown-item">Configurar usuario</a>
+            <a href="/api/sessions/logout" class="dropdown-item logout">Cerrar
+              sesión</a>
+          </div>
+        </div>
+      {{else}}
+        <!-- Si NO está logueado -->
+        <a href="/login" class="login-button">Ingresar</a>
+      {{/if}}
+
+    </div>
+  </div>
+</header>
+
+<script>
+  const toggle = document.getElementById('userMenuToggle');
+  const dropdown = document.getElementById('userDropdown');
+
+  if (toggle && dropdown) {
+    toggle.addEventListener('click', () => {
+      dropdown.classList.toggle('active');
+    });
+
+    // Cerrar al hacer clic fuera
+    document.addEventListener('click', (e) => {
+      if (!toggle.contains(e.target) && !dropdown.contains(e.target)) {
+        dropdown.classList.remove('active');
+      }
+    });
+  }
+</script>

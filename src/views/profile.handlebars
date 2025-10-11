@@ -1,0 +1,109 @@
+<div class="profile-container">
+  <div class="profile-box">
+    <h2>Configuración de usuario</h2>
+
+    <form id="profileForm" enctype="multipart/form-data">
+      <div class="profile-avatar">
+        <img 
+          id="avatarPreview" 
+          src="{{#if user.avatar}}{{user.avatar}}{{else}}/img/default-avatar.png{{/if}}" 
+          alt="Avatar del usuario" 
+        />
+        <label for="avatar" class="btn-avatar">Cambiar foto</label>
+        <input type="file" id="avatar" name="avatar" accept="image/*" hidden />
+      </div>
+
+      <div class="profile-fields">
+        <label>Nombre</label>
+        <input name="first_name" type="text" value="{{user.first_name}}" required />
+
+        <label>Apellido</label>
+        <input name="last_name" type="text" value="{{user.last_name}}" required />
+
+        <label>Email</label>
+        <input name="email" type="email" value="{{user.email}}" required />
+
+        <label>Edad</label>
+        <input name="age" type="number" value="{{user.age}}" min="0" />
+
+        <label>Nueva contraseña (opcional)</label>
+        <input name="password" type="password" placeholder="********" />
+      </div>
+
+      <button type="submit" class="btn-save">Guardar cambios</button>
+    </form>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  // --- Vista previa de la imagen seleccionada ---
+  const avatarInput = document.getElementById("avatar");
+  const avatarPreview = document.getElementById("avatarPreview");
+
+  avatarInput?.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      avatarPreview.src = URL.createObjectURL(file);
+    }
+  });
+
+  // --- Envío del formulario ---
+  document.getElementById("profileForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+
+    try {
+      const res = await fetch("/api/users/profile", {
+        method: "PUT",
+        body: formData,
+        credentials: "include",
+      });
+
+      const json = await res.json();
+
+      if (res.ok) {
+        Swal.fire({
+          title: "Perfil actualizado",
+          text: "Los cambios fueron guardados correctamente.",
+          icon: "success",
+          confirmButtonColor: "#4FD1C5",
+        }).then(() => {
+          // 🔄 Actualiza dinámicamente la foto del perfil sin romper el CSS
+          const timestamp = new Date().getTime();
+          const newAvatarUrl = `${avatarPreview.src.split("?")[0]}?v=${timestamp}`;
+          avatarPreview.src = newAvatarUrl;
+
+          const navbarAvatar = document.querySelector(".navbar-avatar img");
+          if (navbarAvatar) {
+            navbarAvatar.src = newAvatarUrl;
+          }
+
+          // También actualiza iniciales si no hay avatar
+          const navbarInitials = document.querySelector(".navbar-initials");
+          if (navbarInitials && json.user?.first_name && json.user?.last_name) {
+            navbarInitials.textContent =
+              json.user.first_name[0].toUpperCase() + json.user.last_name[0].toUpperCase();
+          }
+        });
+      } else {
+        Swal.fire({
+          title: "Error",
+          text: json.message || "No se pudo actualizar el perfil.",
+          icon: "error",
+          confirmButtonColor: "#e53e3e",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        title: "Error inesperado",
+        text: "Ocurrió un problema. Intentalo más tarde.",
+        icon: "error",
+        confirmButtonColor: "#e53e3e",
+      });
+    }
+  });
+</script>

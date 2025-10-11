@@ -1,0 +1,24 @@
+<header class="navbar">
+  <div class="container">
+    <a href="/" class="logo">
+      <img src="/img/logo.png" alt="Hostlee logo" class="logo-img" />
+      Hostlee
+    </a>
+
+    <nav class="nav-links">
+      <a href="/">Inicio</a>
+      <a href="/about">Acerca de Nosotros</a>
+      <a href="/faq">Preguntas Frecuentes</a>
+      <a href="/contact">Contacto</a>
+    </nav>
+
+    <div class="nav-actions">
+      <a href="/api/carts/view" class="cart-icon" title="Carrito de compras">
+        <i class="fa-solid fa-calendar-week"></i>
+        <span class="cart-count">{{cartCount}}</span>
+      </a>
+      <a href="/login" class="login-button">Ingresar</a>
+    </div>
+  </div>
+</header>
+
