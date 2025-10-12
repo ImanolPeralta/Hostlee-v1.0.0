@@ -128,7 +128,7 @@ app.use(cartCount); // Middleware para contar productos en el carrito
 app.use("/", viewsRouter); // Página de inicio
 app.use("/products", productsRouter);
 app.use("/api/carts", cartsRouter);
-app.use("/admin", adminAuthRouter); // Rutas de autenticación del admin
+app.use("/login/admin", adminAuthRouter); // Rutas de autenticación del admin
 
 // Perfil de usuario
 app.use("/", profileRouter);

@@ -37,11 +37,19 @@ async function requireAuth(req, res, next) {
     if (!token) return res.redirect("/login");
 
     const payload = jwt.verify(token, JWT_SECRET);
-    const user = await User.findById(payload.id); // ❌ sin .lean()
+    const user = await User.findById(payload.id).lean(); // ⚠️ con .lean() para obtener objeto plano
 
     if (!user) return res.redirect("/login");
 
-    req.user = user; // mantiene un documento Mongoose completo
+    // Normalizar el formato (usar id en vez de _id)
+    req.user = {
+      id: user._id.toString(),
+      email: user.email,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      avatar: user.avatar || null,
+    };
+
     next();
   } catch (err) {
     console.error("Error en requireAuth:", err);
@@ -50,8 +58,7 @@ async function requireAuth(req, res, next) {
 }
 
 // GET → Mostrar perfil
-router.get("/", async (req, res) => {
-  if (!req.user) return res.redirect("/login");
+router.get("/", requireAuth, async (req, res) => {
   res.render("profile", { title: "Mi Perfil", user: req.user });
 });
 
@@ -62,36 +69,42 @@ router.put(
   upload.single("avatar"),
   async (req, res) => {
     try {
-      const { first_name, last_name, age } = req.body;
-      const update = { first_name, last_name, age };
+      const { first_name, last_name, email, age, password } = req.body;
+      const update = { first_name, last_name, email, age };
+
+      if (password && password.trim() !== "") {
+        const hashed = await bcrypt.hash(password, 10);
+        update.password = hashed;
+      }
 
       if (req.file) {
         update.avatar = "/uploads/avatars/" + req.file.filename;
       }
 
-      // Actualizar usuario y obtener el documento nuevo
       const updatedUser = await User.findByIdAndUpdate(req.user.id, update, {
         new: true,
       }).lean();
 
-      // Regenerar JWT con los nuevos datos
+      // actualizar token y locals
       const token = jwt.sign(
         {
           id: updatedUser._id,
           email: updatedUser.email,
           first_name: updatedUser.first_name,
           last_name: updatedUser.last_name,
+          avatar: updatedUser.avatar || null,
         },
         JWT_SECRET,
         { expiresIn: "1d" }
       );
 
-      // Reemplazar cookie con el token actualizado
       res.cookie("token", token, {
         httpOnly: true,
         sameSite: "lax",
-        maxAge: 24 * 60 * 60 * 1000, // 1 día
+        maxAge: 24 * 60 * 60 * 1000,
       });
+
+      res.locals.user = updatedUser;
 
       res.status(200).json({
         success: true,

@@ -1,5 +1,6 @@
 import { Router } from "express";
 import ProductManager from "../managers/ProductManager.js";
+import { isAdmin } from "../middleware/isAdmin.js";
 
 const router = Router();
 const productManager = new ProductManager(); // Ya usa base de datos o memoria
@@ -39,16 +40,12 @@ router.get("/", async (req, res) => {
 // ----------------------
 // 🧑‍💼 Panel de administración
 // ----------------------
-router.get("/admin", async (req, res) => {
+router.get("/admin", isAdmin, async (req, res) => {
   try {
-    const result = await productManager.getProducts({ limit: 100 });
-    res.render("admin", {
-      title: "Productos en Tiempo Real",
-      products: result.payload,
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Error al cargar la página de administración");
+    const result = await productManager.getProducts();
+    res.render("adminPanel", { title: "Admin", products: result.payload });
+  } catch (err) {
+    res.status(500).send("Error al cargar el panel de inicio");
   }
 });
 

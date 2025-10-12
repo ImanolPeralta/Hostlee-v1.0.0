@@ -24,10 +24,11 @@
         <div class="user-menu">
           <div class="user-avatar" id="userMenuToggle">
             {{#if user.avatar}}
-              <img src="{{user.avatar}}" alt="avatar" />
-            {{else}}
-              <span>{{user.initials}}</span>
-            {{/if}}
+  <img src="{{user.avatar}}" alt="avatar" class="navbar-avatar" />
+{{else}}
+  <div class="navbar-initials">{{user.first_name.[0]}}{{user.last_name.[0]}}</div>
+{{/if}}
+
           </div>
 
           <div class="user-dropdown" id="userDropdown">
