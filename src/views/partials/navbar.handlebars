@@ -1,4 +1,4 @@
-<header class="navbar">
+app.use<header class="navbar">
   <div class="container">
     <a href="/" class="logo">
       <img src="/img/logo.png" alt="Hostlee logo" class="logo-img" />
@@ -24,10 +24,18 @@
         <div class="user-menu">
           <div class="user-avatar" id="userMenuToggle">
             {{#if user.avatar}}
-  <img src="{{user.avatar}}" alt="avatar" class="navbar-avatar" />
-{{else}}
-  <div class="navbar-initials">{{user.first_name.[0]}}{{user.last_name.[0]}}</div>
-{{/if}}
+              <img src="{{user.avatar}}" alt="avatar" class="navbar-avatar" />
+            {{else}}
+              <img
+                src="/uploads/avatars/default-avatar.png"
+                alt="avatar"
+                class="navbar-avatar"
+                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+              />
+              <div class="navbar-initials" style="display:none;">
+                {{lookup user.first_name 0}}{{lookup user.last_name 0}}
+              </div>
+            {{/if}}
 
           </div>
 
@@ -47,19 +55,11 @@
 </header>
 
 <script>
-  const toggle = document.getElementById('userMenuToggle');
-  const dropdown = document.getElementById('userDropdown');
-
-  if (toggle && dropdown) {
-    toggle.addEventListener('click', () => {
-      dropdown.classList.toggle('active');
-    });
-
-    // Cerrar al hacer clic fuera
-    document.addEventListener('click', (e) => {
-      if (!toggle.contains(e.target) && !dropdown.contains(e.target)) {
-        dropdown.classList.remove('active');
-      }
-    });
-  }
+  const toggle = document.getElementById('userMenuToggle'); const dropdown =
+  document.getElementById('userDropdown'); if (toggle && dropdown) {
+  toggle.addEventListener('click', () => { dropdown.classList.toggle('active');
+  }); // Cerrar al hacer clic fuera
+  document.addEventListener('click', (e) => {
+  if (!toggle.contains(e.target) && !dropdown.contains(e.target)) {
+  dropdown.classList.remove('active'); } }); }
 </script>

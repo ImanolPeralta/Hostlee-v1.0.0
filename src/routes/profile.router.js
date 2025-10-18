@@ -69,6 +69,14 @@ router.put(
   upload.single("avatar"),
   async (req, res) => {
     try {
+      // Pruebas de depuración
+      console.log("=== PUT /api/users/profile incoming ===");
+      console.log("req.body (keys):", Object.keys(req.body));
+      console.log(
+        "req.file:",
+        req.file ? { filename: req.file.filename, path: req.file.path } : null
+      );
+
       const { first_name, last_name, email, age, password } = req.body;
       const update = { first_name, last_name, email, age };
 
@@ -78,14 +86,14 @@ router.put(
       }
 
       if (req.file) {
-        update.avatar = "/uploads/avatars/" + req.file.filename;
+        update.avatar = `/uploads/avatars/${req.file.filename}`;
       }
 
       const updatedUser = await User.findByIdAndUpdate(req.user.id, update, {
         new: true,
       }).lean();
 
-      // actualizar token y locals
+      // Reemitir token actualizado con avatar incluido
       const token = jwt.sign(
         {
           id: updatedUser._id,
@@ -103,9 +111,9 @@ router.put(
         sameSite: "lax",
         maxAge: 24 * 60 * 60 * 1000,
       });
-
-      res.locals.user = updatedUser;
-
+      // Pruebas de depuración
+      console.log("updatedUser.avatar:", updatedUser.avatar);
+      // Continúa el flujo normal
       res.status(200).json({
         success: true,
         message: "Perfil actualizado correctamente",

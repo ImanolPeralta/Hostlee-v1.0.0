@@ -6,7 +6,7 @@
       <div class="profile-avatar">
         <img 
           id="avatarPreview" 
-          src="{{#if user.avatar}}{{user.avatar}}{{else}}/img/default-avatar.png{{/if}}" 
+          src="{{#if user.avatar}}{{user.avatar}}{{else}}/uploads/avatars/default-avatar.png{{/if}}"
           alt="Avatar del usuario" 
         />
         <label for="avatar" class="btn-avatar">Cambiar foto</label>
@@ -36,6 +36,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/js/profile.js"></script>
 
 <script>
   // --- Vista previa de la imagen seleccionada ---
@@ -66,28 +67,29 @@
 
       if (res.ok) {
         Swal.fire({
-          title: "Perfil actualizado",
-          text: "Los cambios fueron guardados correctamente.",
-          icon: "success",
-          confirmButtonColor: "#4FD1C5",
-        }).then(() => {
-          // 🔄 Actualiza dinámicamente la foto del perfil sin romper el CSS
-          const timestamp = new Date().getTime();
-          const newAvatarUrl = `${avatarPreview.src.split("?")[0]}?v=${timestamp}`;
-          avatarPreview.src = newAvatarUrl;
+  title: "Perfil actualizado",
+  text: "Los cambios fueron guardados correctamente.",
+  icon: "success",
+  confirmButtonColor: "#4FD1C5",
+}).then(() => {
+  const timestamp = new Date().getTime();
+  const newAvatarUrl = `${avatarPreview.src.split("?")[0]}?v=${timestamp}`;
+  avatarPreview.src = newAvatarUrl;
 
-          const navbarAvatar = document.querySelector(".navbar-avatar img");
-          if (navbarAvatar) {
-            navbarAvatar.src = newAvatarUrl;
-          }
+  const navbarAvatar = document.querySelector(".navbar-avatar");
+  if (navbarAvatar) {
+    navbarAvatar.src = newAvatarUrl;
+  }
 
-          // También actualiza iniciales si no hay avatar
-          const navbarInitials = document.querySelector(".navbar-initials");
-          if (navbarInitials && json.user?.first_name && json.user?.last_name) {
-            navbarInitials.textContent =
-              json.user.first_name[0].toUpperCase() + json.user.last_name[0].toUpperCase();
-          }
-        });
+  const navbarInitials = document.querySelector(".navbar-initials");
+  if (navbarInitials && json.user?.first_name && json.user?.last_name) {
+    navbarInitials.textContent =
+      json.user.first_name[0].toUpperCase() + json.user.last_name[0].toUpperCase();
+  }
+
+  // 🔄 Refrescar toda la UI para sincronizar nombre/email con el nuevo token
+  window.location.reload();
+});
       } else {
         Swal.fire({
           title: "Error",
