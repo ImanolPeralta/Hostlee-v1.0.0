@@ -69,27 +69,19 @@ router.put(
   upload.single("avatar"),
   async (req, res) => {
     try {
-      // Pruebas de depuración
-      console.log("=== PUT /api/users/profile incoming ===");
-      console.log("req.body (keys):", Object.keys(req.body));
-      console.log(
-        "req.file:",
-        req.file ? { filename: req.file.filename, path: req.file.path } : null
-      );
-
       const { first_name, last_name, email, age, password } = req.body;
-      const update = { first_name, last_name, email, age };
+      const user = { first_name, last_name, email, age };
 
       if (password && password.trim() !== "") {
         const hashed = await bcrypt.hash(password, 10);
-        update.password = hashed;
+        user.password = hashed;
       }
 
       if (req.file) {
-        update.avatar = `/uploads/avatars/${req.file.filename}`;
+        user.avatar = `/uploads/avatars/${req.file.filename}`;
       }
 
-      const updatedUser = await User.findByIdAndUpdate(req.user.id, update, {
+      const updatedUser = await User.findByIdAndUpdate(req.user.id, user, {
         new: true,
       }).lean();
 
@@ -111,9 +103,6 @@ router.put(
         sameSite: "lax",
         maxAge: 24 * 60 * 60 * 1000,
       });
-      // Pruebas de depuración
-      console.log("updatedUser.avatar:", updatedUser.avatar);
-      // Continúa el flujo normal
       res.status(200).json({
         success: true,
         message: "Perfil actualizado correctamente",
