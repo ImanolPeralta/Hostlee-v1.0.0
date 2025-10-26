@@ -89,6 +89,12 @@ app.use(
     },
   })
 );
+// --- Middleware global para pasar estado del admin a todas las vistas ---
+app.use((req, res, next) => {
+  res.locals.isAdmin = req.session.isAdmin || false;
+  next();
+});
+
 // --- Middleware: poblar res.locals.user desde JWT en cookie (para templates) ---
 const JWT_SECRET = process.env.JWT_SECRET || "supersecreto";
 app.use(async (req, res, next) => {
@@ -128,7 +134,7 @@ app.use(cartCount); // Middleware para contar productos en el carrito
 app.use("/", viewsRouter); // Página de inicio
 app.use("/products", productsRouter);
 app.use("/api/carts", cartsRouter);
-app.use("/login/admin", adminAuthRouter); // Rutas de autenticación del admin
+app.use("/admin", adminAuthRouter); // Rutas de autenticación del admin
 
 // Perfil de usuario
 app.use("/", profileRouter);

@@ -6,7 +6,7 @@
       {{#if error}}
         <div class="error-message">{{error}}</div>
       {{/if}}
-
+      {{!-- Ruta para el login del admin: /admin/login --}}
       <form action="/admin/login" method="POST">
         <input type="email" name="email" id="email" required placeholder="Correo electrónico" />
         <input type="password" name="password" id="password" required placeholder="Contraseña" />

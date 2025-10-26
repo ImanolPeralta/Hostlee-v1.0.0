@@ -49,6 +49,16 @@ app.use<header class="navbar">
         <!-- Si NO está logueado -->
         <a href="/login" class="login-button">Ingresar</a>
       {{/if}}
+      {{#if isAdmin}}
+  <div class="user-menu">
+    <div class="navbar-initials">ADMIN</div>
+    <div class="user-dropdown active">
+      <a href="/admin/logout" class="dropdown-item logout">Cerrar sesión</a>
+    </div>
+  </div>
+{{else}}
+  {{!-- Aquí sigue tu lógica normal del usuario común --}}
+{{/if}}
 
     </div>
   </div>

@@ -1,6 +1,7 @@
 import { Router } from "express";
 import ProductManager from "../managers/ProductManager.js";
 import { isAdmin } from "../middleware/isAdmin.js";
+import jwt from "jsonwebtoken";
 
 const router = Router();
 const productManager = new ProductManager(); // Ya usa base de datos o memoria
@@ -43,7 +44,7 @@ router.get("/", async (req, res) => {
 router.get("/admin", isAdmin, async (req, res) => {
   try {
     const result = await productManager.getProducts();
-    res.render("adminPanel", { title: "Admin", products: result.payload });
+    res.render("admin", { title: "Admin", products: result.payload });
   } catch (err) {
     res.status(500).send("Error al cargar el panel de inicio");
   }
