@@ -1,4 +1,4 @@
-app.use<header class="navbar">
+<header class="navbar">
   <div class="container">
     <a href="/" class="logo">
       <img src="/img/logo.png" alt="Hostlee logo" class="logo-img" />
@@ -13,14 +13,26 @@ app.use<header class="navbar">
     </nav>
 
     <div class="nav-actions">
-      {{#if user}}
+
+      {{!-- 🔹 1. Si el admin está logueado, mostrar su icono y ocultar "Ingresar" --}}
+      {{#if isAdmin}}
+        <div class="user-menu">
+          <div class="user-avatar" id="adminMenuToggle">
+            <div class="navbar-initials admin-initials">AM</div>
+          </div>
+
+          <div class="user-dropdown" id="adminDropdown">
+            <a href="/admin/logout" class="dropdown-item logout">Cerrar sesión</a>
+          </div>
+        </div>
+
+      {{!-- 🔹 2. Si NO es admin pero hay usuario logueado --}}
+      {{else if user}}
         <a href="/api/carts/view" class="cart-icon" title="Carrito de compras">
           <i class="fa-solid fa-house"></i>
           <span class="cart-count">{{cartCount}}</span>
         </a>
-      {{/if}}
-      {{#if user}}
-        <!-- Si el usuario está logueado -->
+
         <div class="user-menu">
           <div class="user-avatar" id="userMenuToggle">
             {{#if user.avatar}}
@@ -36,40 +48,51 @@ app.use<header class="navbar">
                 {{lookup user.first_name 0}}{{lookup user.last_name 0}}
               </div>
             {{/if}}
-
           </div>
 
           <div class="user-dropdown" id="userDropdown">
             <a href="/profile" class="dropdown-item">Configurar usuario</a>
-            <a href="/api/sessions/logout" class="dropdown-item logout">Cerrar
-              sesión</a>
+            <a href="/api/sessions/logout" class="dropdown-item logout">Cerrar sesión</a>
           </div>
         </div>
+
+      {{!-- 🔹 3. Si no hay usuario ni admin, mostrar botón de login --}}
       {{else}}
-        <!-- Si NO está logueado -->
         <a href="/login" class="login-button">Ingresar</a>
       {{/if}}
-      {{#if isAdmin}}
-  <div class="user-menu">
-    <div class="navbar-initials">ADMIN</div>
-    <div class="user-dropdown active">
-      <a href="/admin/logout" class="dropdown-item logout">Cerrar sesión</a>
-    </div>
-  </div>
-{{else}}
-  {{!-- Aquí sigue tu lógica normal del usuario común --}}
-{{/if}}
 
     </div>
   </div>
 </header>
 
 <script>
-  const toggle = document.getElementById('userMenuToggle'); const dropdown =
-  document.getElementById('userDropdown'); if (toggle && dropdown) {
-  toggle.addEventListener('click', () => { dropdown.classList.toggle('active');
-  }); // Cerrar al hacer clic fuera
-  document.addEventListener('click', (e) => {
-  if (!toggle.contains(e.target) && !dropdown.contains(e.target)) {
-  dropdown.classList.remove('active'); } }); }
+  // --- Toggle para usuario común ---
+  const toggle = document.getElementById('userMenuToggle'); 
+  const dropdown = document.getElementById('userDropdown'); 
+  if (toggle && dropdown) {
+    toggle.addEventListener('click', () => { 
+      dropdown.classList.toggle('active');
+    }); 
+    document.addEventListener('click', (e) => {
+      if (!toggle.contains(e.target) && !dropdown.contains(e.target)) {
+        dropdown.classList.remove('active'); 
+      } 
+    }); 
+  }
+
+  // --- Toggle para administrador ---
+  const adminToggle = document.getElementById('adminMenuToggle');
+  const adminDropdown = document.getElementById('adminDropdown');
+
+  if (adminToggle && adminDropdown) {
+    adminToggle.addEventListener('click', () => {
+      adminDropdown.classList.toggle('active');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!adminToggle.contains(e.target) && !adminDropdown.contains(e.target)) {
+        adminDropdown.classList.remove('active');
+      }
+    });
+  }
 </script>

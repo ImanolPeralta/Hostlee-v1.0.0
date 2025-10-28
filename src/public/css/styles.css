@@ -68,7 +68,6 @@ body {
   object-fit: cover;
 }
 
-
 .cart-icon {
   position: relative;
   display: inline-block;
@@ -125,7 +124,6 @@ body {
   margin-bottom: 1rem;
   opacity: 0.9;
 }
-
 
 .empty-reservations h3 {
   font-size: 1.5rem;
@@ -2006,11 +2004,11 @@ body {
   border-radius: 50%;
   object-fit: cover;
   margin-bottom: 10px;
-  border: 3px solid #4FD1C5;
+  border: 3px solid #4fd1c5;
 }
 
 .btn-avatar {
-  background-color: #4FD1C5;
+  background-color: #4fd1c5;
   color: white;
   border-radius: 30px;
   padding: 8px 16px;
@@ -2036,7 +2034,7 @@ body {
 
 .btn-save {
   margin-top: 25px;
-  background-color: #4FD1C5;
+  background-color: #4fd1c5;
   color: white;
   border: none;
   border-radius: 50px;
@@ -2048,4 +2046,43 @@ body {
 
 .btn-save:hover {
   background-color: #319795;
+}
+
+/* Ícono redondo del administrador */
+.admin-initials {
+  background-color: #ff6b6b;
+  color: white;
+  font-weight: 600;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-size: 14px;
+  overflow: hidden;
+}
+
+.admin-initials:hover {
+  background-color: #e85c5c;
+}
+
+/* Dropdown del admin */
+#adminDropdown {
+  position: absolute;
+  top: 48px;
+  right: 0;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  display: none;
+  flex-direction: column;
+  min-width: 180px;
+  z-index: 100;
+}
+
+#adminDropdown.active {
+  display: flex;
 }

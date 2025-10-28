@@ -130,6 +130,12 @@ app.use(async (req, res, next) => {
 
 app.use(cartCount); // Middleware para contar productos en el carrito
 
+// Middleware global: pasar info del admin a las vistas
+app.use((req, res, next) => {
+  res.locals.isAdmin = req.session.isAdmin || false;
+  next();
+});
+
 // Rutas
 app.use("/", viewsRouter); // Página de inicio
 app.use("/products", productsRouter);
