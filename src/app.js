@@ -21,6 +21,7 @@ import jwt from "jsonwebtoken";
 import User from "./data/models/user.model.js";
 import "./config/passport.js";
 import sessionsRouter from "./routes/sessions.router.js";
+import reviewsRouter from "./routes/reviews.router.js";
 
 const app = express();
 const PORT = 8080;
@@ -147,6 +148,9 @@ app.use("/", profileRouter);
 
 // Ruta de autenticación de usuario con JWT
 app.use("/api/sessions", sessionsRouter);
+
+// Ruta de comentarios y reseñas
+app.use("/api/reviews", reviewsRouter);
 
 // WebSockets
 io.on("connection", async (socket) => {

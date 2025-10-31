@@ -47,8 +47,12 @@
       {{product.stock}}
     </p>
 
-    <button data-product-id="{{product._id}}" class="add-to-cart" onclick="addToCart('{{product._id}}')">
-      <i class="fa-solid fa-calendar-week fa-fade" style="color: #fff;" ></i>
+    <button
+      data-product-id="{{product._id}}"
+      class="add-to-cart"
+      onclick="addToCart('{{product._id}}')"
+    >
+      <i class="fa-solid fa-calendar-week fa-fade" style="color: #fff;"></i>
       Reservar
     </button>
 
@@ -57,14 +61,53 @@
         Reserva segura y garantizada</p>
       <p><i class="fa fa-ban" style="color: #319795;"></i>
         Cancelación flexible</p>
-      <p><i class="fa fa-headset" style="color: #319795; "></i> Atención 24/7</p>
+      <p><i class="fa fa-headset" style="color: #319795; "></i>
+        Atención 24/7</p>
       <p><i class="fa-solid fa-wifi" style="color: #319795;"></i>
         WiFi Gratis</p>
-      <p><i class="fa-solid fa-star-half-stroke fa-beat" style="color: #f6ad55;"></i>
+      <p><i
+          class="fa-solid fa-star-half-stroke fa-beat"
+          style="color: #f6ad55;"
+        ></i>
         4.8/5 (325 opiniones)</p>
     </div>
   </div>
 </div>
+<!-- ====================== -->
+<!-- SECCIÓN DE RESEÑAS -->
+<!-- ====================== -->
+<div class="reviews-section">
+  <h2>Reseñas de este hospedaje</h2>
+
+  <!-- Contenedor donde se mostrarán las reseñas -->
+  <div id="reviewsContainer" class="reviews-list">
+    <p class="no-reviews">Cargando reseñas...</p>
+  </div>
+
+  {{#if user}}
+    <!-- Formulario solo visible para usuarios logueados -->
+    <form id="reviewForm" class="review-form">
+      <textarea
+        id="reviewComment"
+        name="comment"
+        placeholder="Escribí tu experiencia sobre este hospedaje..."
+        required
+      ></textarea>
+      <button type="submit" class="submit-review">
+        <i class="fa-solid fa-paper-plane"></i>
+        Enviar reseña
+      </button>
+    </form>
+  {{else}}
+    <p class="login-to-comment">
+      <a href="/login">Iniciá sesión</a>
+      para dejar una reseña.
+    </p>
+  {{/if}}
+</div>
+
+<!-- Importaciones de los -->
+<script src="/js/reviews.js"></script>
 <script src="/js/cart.js"></script>
 <script>
   function changeMainImage(src) {
