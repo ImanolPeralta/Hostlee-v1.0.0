@@ -73,6 +73,19 @@
     </div>
   </div>
 </div>
+
+<!-- ====================== -->
+<!-- SECCIÓN DE PUNTUACIÓN -->
+<!-- ====================== -->
+<div id="ratingContainer" class="rating-section">
+  <h2>Valoración del alojamiento</h2>
+  <div id="ratingStars" class="rating-stars">
+    {{!-- Las estrellas se insertan con JavaScript --}}
+  </div>
+  <p id="avgRatingText" class="rating-average">Cargando valoración...</p>
+</div>
+
+
 <!-- ====================== -->
 <!-- SECCIÓN DE RESEÑAS -->
 <!-- ====================== -->
@@ -106,7 +119,10 @@
   {{/if}}
 </div>
 
-<!-- Importaciones de los -->
+<!-- Importaciones de los scripts -->
+<script>
+  window.userLoggedIn = {{#if user}}true{{else}}false{{/if}};
+</script>
 <script src="/js/reviews.js"></script>
 <script src="/js/cart.js"></script>
 <script>

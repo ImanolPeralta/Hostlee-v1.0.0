@@ -2101,7 +2101,7 @@ body {
   color: #2d3748;
   font-weight: 700;
   margin-bottom: 25px;
-  border-bottom: 1px solid #CBD5E0;
+  border-bottom: 1px solid #cbd5e0;
   padding-bottom: 12px;
 }
 
@@ -2199,7 +2199,7 @@ body {
 /* Botón Enviar reseña */
 .submit-review {
   align-self: flex-end;
-  background-color: #4FD1C5;
+  background-color: #4fd1c5;
   color: #fff;
   border: none;
   border-radius: 50px;
@@ -2234,11 +2234,62 @@ body {
   text-decoration: underline;
 }
 
-
-
 /* Responsivo */
 @media (max-width: 768px) {
   .reviews-section {
     padding: 25px 20px;
   }
+}
+
+/* --------------------------
+      Sección de reseñas
+-------------------------- */
+
+.rating-section {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+.average-rating {
+  background: #fff;
+  padding: 1rem 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.average-rating h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+  color: #2d3748;
+}
+
+.average-rating .stars i {
+  color: #f6ad55;
+  margin-right: 3px;
+}
+
+.average-rating .avg-number {
+  color: #718096;
+  font-size: 0.9rem;
+}
+
+.rating-form {
+  margin-top: 1rem;
+}
+
+.rating-form .star-input i {
+  font-size: 1.5rem;
+  color: #cbd5e0;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.rating-form .star-input i:hover,
+.rating-form .star-input i:hover ~ i {
+  color: #f6ad55;
+}
+
+.fa-star.filled {
+  color: #f6ad55;
 }

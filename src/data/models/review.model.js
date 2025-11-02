@@ -13,9 +13,13 @@ const reviewSchema = new mongoose.Schema({
   },
   comment: {
     type: String,
-    required: true,
     trim: true,
-    maxlength: 500, // máximo 500 caracteres
+    maxlength: 500,
+  },
+  rating: {
+    type: Number,
+    min: 1,
+    max: 5,
   },
   createdAt: {
     type: Date,
