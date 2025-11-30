@@ -1,48 +1,67 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema(
+  {
     first_name: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     last_name: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     email: {
-        type: String,
-        required: true,
-        unique: true,
-        lowercase: true
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
     },
     age: {
-        type: Number
+      type: Number,
     },
     password: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     cart: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Cart'
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Cart",
     },
     role: {
-        type: String,
-        default: 'user'
+      type: String,
+      default: "user",
     },
     avatar: {
-        type: String,
-        default: '/uploads/avatars/default-avatar.png'
-    }
-}, { timestamps: true });
+      type: String,
+      default: "/uploads/avatars/default-avatar.png",
+    },
 
-// Para no devolver password en responses
+    // --- CAMPOS NUEVOS + DEFAULTS ---
+    documents: {
+      type: [
+        {
+          name: { type: String },
+          reference: { type: String },
+        },
+      ],
+      default: [],
+    },
+
+    last_connection: {
+      type: Date,
+      default: null,
+    },
+  },
+  { timestamps: true }
+);
+
+// Evitar que devuelva password en responses
 userSchema.methods.toJSON = function () {
-    const obj = this.toObject();
-    delete obj.password;
-    return obj;
+  const obj = this.toObject();
+  delete obj.password;
+  return obj;
 };
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model("User", userSchema);
 
 export default User;

@@ -31,6 +31,19 @@ router.get("/:pid", async (req, res) => {
   }
 });
 
+// GET pagination products
+router.get('/', async (req, res) => {
+  try {
+    const { page = 1, limit = 10, sort } = req.query;
+    const sortOption = sort === 'asc' ? { price: 1 } : sort === 'desc' ? { price: -1 } : {};
+    const options = { page: Number(page), limit: Number(limit), sort: sortOption };
+    const result = await ProductModel.paginate({}, options);
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({error: 'Error fecthing products' });
+  }
+});
+
 // POST /api/products/
 router.post("/", async (req, res) => {
   try {

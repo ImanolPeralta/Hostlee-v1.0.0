@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  hostlee:
+    build: .
+    image: tuusuario/hostlee:1.0.0
+    ports:
+      - "8080:8080"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/hostlee
+      - NODE_ENV=production
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:6
+    restart: always
+    ports:
+      - "27017:27017"

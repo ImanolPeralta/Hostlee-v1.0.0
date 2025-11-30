@@ -2,6 +2,7 @@ import { Router } from "express";
 import ProductManager from "../managers/ProductManager.js";
 import { isAdmin } from "../middleware/isAdmin.js";
 import jwt from "jsonwebtoken";
+import passport from "passport";
 
 const router = Router();
 const productManager = new ProductManager(); // Ya usa base de datos o memoria
@@ -85,9 +86,16 @@ router.get("/login", (req, res) => {
 // ----------------------
 // 👥 Perfil del usuario
 // ----------------------
-router.get("/profile", (req, res) => {
-  res.render("profile", { title: "Perfil de usuario" });
-});
+router.get(
+  "/profile",
+  passport.authenticate("current", { session: false }),
+  (req, res) => {
+    res.render("profile", {
+      title: "Perfil de usuario",
+      user: req.user,   // <<--- clave
+    });
+  }
+);
 
 // ----------------------
 // 📄 Secciones informativas

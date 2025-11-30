@@ -4,15 +4,20 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "cross-env NODE_ENV=test mocha \"src/test/**/*.test.js\" --timeout 5000"
   },
+  "test": "mocha --exit --recursive test",
+  "test:watch": "mocha --watch --recursive test",
+  "coverage": "nyc mocha --exit --recursive test",
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@faker-js/faker": "^10.1.0",
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
+    "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "express-handlebars": "^8.0.3",
     "express-session": "^1.18.2",
@@ -25,6 +30,18 @@
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "socket.io": "^4.8.1",
-    "sweetalert2": "^11.22.3"
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "sweetalert2": "^11.22.3",
+    "winston": "^3.18.3",
+    "winston-daily-rotate-file": "^5.0.0"
+  },
+  "devDependencies": {
+    "chai": "^6.2.1",
+    "cross-env": "^10.1.0",
+    "mocha": "^11.7.5",
+    "mongodb-memory-server": "^10.3.0",
+    "nyc": "^17.1.0",
+    "supertest": "^7.1.4"
   }
 }

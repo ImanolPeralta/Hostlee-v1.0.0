@@ -1,18 +1,17 @@
-// src/data/models/Product.js
+// Esto si rompe la App después se puede modificar trayendo el código anterior
+
 import mongoose from "mongoose";
-import paginate from "mongoose-paginate-v2";
+import mongoosePaginate from 'mongoose-paginate-v2';
 
-const productSchema = new mongoose.Schema({
-  title: { type: String, required: true },
+const ProductSchema = new mongoose.Schema({
+  title: String,
   description: String,
-  code: { type: String, required: true, unique: true },
-  price: { type: Number, required: true },
-  status: { type: Boolean, default: true },
-  stock: { type: Number, required: true },
+  price: Number,
+  stock: Number,
   category: String,
-  thumbnails: [String],
-});
+  images: [String],
+  host: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+}, { timestamps: true });
 
-productSchema.plugin(paginate);
-
-export default mongoose.model("Product", productSchema);
+ProductSchema.plugin(mongoosePaginate);
+export default mongoose.model('Product', ProductSchema);
