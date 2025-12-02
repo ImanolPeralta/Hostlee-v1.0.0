@@ -30,7 +30,9 @@ const io = new Server(httpServer);
 const __filename = fileURLToPath(import.meta.url);
 
 // Conexión a MongoDB
-connectDB();
+if (process.env.NODE_ENV !== "test") {
+  connectDB();
+}
 
 // Instancia del manager (aunque uses Mongo, podrías tener funciones auxiliares ahí)
 const productManager = new ProductManager();
@@ -214,6 +216,16 @@ io.on("connection", async (socket) => {
 });
 
 // Iniciar servidor
-httpServer.listen(PORT, () => {
-  console.log(`🚀 Servidor escuchando en http://localhost:${PORT}`);
-});
+// httpServer.listen(PORT, () => {
+//   console.log(`🚀 Servidor escuchando en http://localhost:${PORT}`);
+// });
+
+// Iniciar servidor solo si NO estamos en testing
+if (process.env.NODE_ENV !== "test") {
+  httpServer.listen(PORT, () => {
+    console.log(`🚀 Servidor escuchando en http://localhost:${PORT}`);
+  });
+}
+
+// Exportar app (para Supertest)
+export default app;
