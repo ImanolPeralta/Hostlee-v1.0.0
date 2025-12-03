@@ -5,17 +5,41 @@ import User from "../data/models/user.model.js";
 import { hashPassword } from "../utils.js";
 import UserDTO from "../dtos/user.dto.js";
 
+// 🆕 Imports del manejo de errores
+import CustomError from "../services/errors/customError.js";
+import { EErrors } from "../services/errors/error-enum.js";
+import { generateUserErrorInfo } from "../services/errors/messages/user-error.message.js";
+
 const router = Router();
 const JWT_SECRET = process.env.JWT_SECRET || "supersecreto";
 
-//Registro de usuario
-router.post("/register", async (req, res) => {
+// Registro de usuario
+router.post("/register", async (req, res, next) => {
   try {
     const { first_name, last_name, email, age, password } = req.body;
 
-    const exists = await User.findOne({ email });
-    if (exists) return res.status(400).json({ message: "Email ya registrado" });
+    // 1️⃣ Validación de campos vacíos
+    if (!first_name || !last_name || !email || !password) {
+      throw CustomError.createError({
+        name: "UserRegistrationError",
+        message: "Campos inválidos al registrar usuario",
+        code: EErrors.INVALID_TYPES_ERROR,
+        cause: generateUserErrorInfo(req.body),
+      });
+    }
 
+    // 2️⃣ Validación si el usuario existe
+    const exists = await User.findOne({ email });
+    if (exists) {
+      throw CustomError.createError({
+        name: "UserAlreadyExistsError",
+        message: "El email ya está registrado",
+        code: EErrors.DATABASE_ERROR,
+        cause: `Email ingresado: ${email}`,
+      });
+    }
+
+    // 3️⃣ Crear el usuario
     const hashedPassword = await hashPassword(password);
 
     const newUser = await User.create({
@@ -28,11 +52,11 @@ router.post("/register", async (req, res) => {
 
     res.json({ status: "success", user: newUser });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    next(err); // ⬅ importante para que caiga en el middleware de errores
   }
 });
 
-// Login de usuario
+// Login de usuario (igual que antes)
 router.post("/login", (req, res, next) => {
   passport.authenticate("local", { session: false }, (err, user, info) => {
     if (err) return next(err);
@@ -54,8 +78,7 @@ router.post("/login", (req, res, next) => {
   })(req, res, next);
 });
 
-// Ruta current
-
+// Current + Logout iguales
 router.get(
   "/current",
   passport.authenticate("current", { session: false }),
@@ -65,11 +88,9 @@ router.get(
   }
 );
 
-// Logout
 router.get("/logout", (req, res) => {
   res.clearCookie("token");
-  res.redirect("/"); // redirige al home automáticamente
+  res.redirect("/");
 });
-
 
 export default router;
