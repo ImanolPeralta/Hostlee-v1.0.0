@@ -1,27 +1,46 @@
-// import { createLogger, format, transports } from 'winston';
-// import path from 'path';
+import winston from "winston";
 
-// const customLevels = {
-//     levels: { debug: 0, http: 1, info: 2, warning: 3, error: 4, fatal: 5 },
-// };
+const customLevels = {
+  levels: {
+    fatal: 0,
+    error: 1,
+    warning: 2,
+    info: 3,
+    http: 4,
+    debug: 5,
+  },
+  colors: {
+    fatal: "red",
+    error: "red",
+    warning: "yellow",
+    info: "blue",
+    http: "magenta",
+    debug: "green",
+  },
+};
 
-// const devLogger = createLogger({
-//     levels: customLevels.levels,
-//     level: 'debug',
-//     format: format.combine(format.timestamp(), format.colorize(), format.simple()),
-//     transports: [new transports.Console()],
-// });
+winston.addColors(customLevels.colors);
 
-// const prodLogger = createLogger({
-//     levels: customLevels.levels,
-//     level: 'info',
-//     format: format.combine(format.timestamp(), format.json()),
-//     transports: [
-//         new transports.Console(),
-//         new transports.File({ filename: path.join(process.cwd(), 'errors.log'), level: 'error' }),
-//     ],
-// });
+const logger = winston.createLogger({
+  levels: customLevels.levels,
+  transports: [
+    new winston.transports.Console({
+      level: process.env.NODE_ENV === "production" ? "info" : "debug",
+      format: winston.format.combine(
+        winston.format.colorize({ all: true }),
+        winston.format.simple()
+      ),
+    }),
 
-// const logger = process.env.NODE_ENV === 'production' ? prodLogger : devLogger;
+    new winston.transports.File({
+      filename: "./logs/errors.log",
+      level: "error",
+      format: winston.format.combine(
+        winston.format.timestamp(),
+        winston.format.json()
+      ),
+    }),
+  ],
+});
 
-// export default logger;
+export default logger;

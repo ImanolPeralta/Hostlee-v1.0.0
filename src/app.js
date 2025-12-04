@@ -22,6 +22,8 @@ import User from "./data/models/user.model.js";
 import "./config/passport.js";
 import sessionsRouter from "./routes/sessions.router.js";
 import reviewsRouter from "./routes/reviews.router.js";
+import { errorHandler } from "./services/errors/middlewares/error-middleware.js";
+import { addLogger } from "./middleware/logger.middleware.js";
 
 const app = express();
 const PORT = 8080;
@@ -153,6 +155,12 @@ app.use("/api/sessions", sessionsRouter);
 
 // Ruta de comentarios y reseñas
 app.use("/api/reviews", reviewsRouter);
+
+// Logger
+app.use(addLogger);
+
+// Ruta de errores ⛔
+app.use(errorHandler);
 
 // WebSockets
 io.on("connection", async (socket) => {

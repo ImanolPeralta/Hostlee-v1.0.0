@@ -1,4 +1,4 @@
-import { EErrors } from "../error-enum";
+import { EErrors } from "../error-enum.js";
 
 export const errorHandler = (err, req, res, next) => {
   console.log("❌ Error capturado:");
