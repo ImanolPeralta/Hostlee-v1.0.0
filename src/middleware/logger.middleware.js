@@ -1,7 +1,11 @@
-import logger from "../logger/logger.js";
+import LoggerSingleton from "../logger/logger.js";
 
 export const addLogger = (req, res, next) => {
+    const logger = LoggerSingleton.getInstance().logger;
+
     req.logger = logger;
-    req.logger.http(`${req.method} $ {req.url} - ${new Date().toLocaleString()}`);
+
+    logger.http(`${req.method} ${req.url} - ${new Date().toLocaleString()}`);
+
     next();
 }

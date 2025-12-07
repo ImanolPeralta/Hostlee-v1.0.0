@@ -8,7 +8,7 @@ import cartsRouter from "./routes/carts.router.js";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import ProductManager from "./managers/ProductManager.js";
-import connectDB from "./data/db.js";
+import MongoSingleton from "./data/mongo.singleton.js";
 import { fileURLToPath } from "url";
 import session from "express-session";
 import cartCount from "./middleware/cartCount.js";
@@ -33,7 +33,7 @@ const __filename = fileURLToPath(import.meta.url);
 
 // Conexión a MongoDB
 if (process.env.NODE_ENV !== "test") {
-  connectDB();
+  MongoSingleton.getInstance();
 }
 
 // Instancia del manager (aunque uses Mongo, podrías tener funciones auxiliares ahí)
