@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { config } from "../config/config.js";
 
 // Implement Singleton pattern for only one DB connection instance.
 
@@ -16,7 +17,7 @@ class MongoSingleton {
 
   async #connect() {
     try {
-      await mongoose.connect("mongodb://localhost:27017/hostlee", {
+      await mongoose.connect(config.MONGO_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
       });

@@ -2,6 +2,10 @@ import express from "express";
 import path from "path";
 import { engine } from "express-handlebars";
 import { __dirname } from "./utils.js";
+
+import { config } from "./config/config.js";
+const PORT = config.PORT;
+
 import viewsRouter from "./routes/views.router.js";
 import productsRouter from "./routes/products.router.js";
 import cartsRouter from "./routes/carts.router.js";
@@ -26,13 +30,12 @@ import { errorHandler } from "./services/errors/middlewares/error-middleware.js"
 import { addLogger } from "./middleware/logger.middleware.js";
 
 const app = express();
-const PORT = 8080;
 const httpServer = createServer(app);
 const io = new Server(httpServer);
 const __filename = fileURLToPath(import.meta.url);
 
 // Conexión a MongoDB
-if (process.env.NODE_ENV !== "test") {
+if (config.NODE_ENV !== "test") {
   MongoSingleton.getInstance();
 }
 
@@ -101,7 +104,7 @@ app.use((req, res, next) => {
 });
 
 // --- Middleware: poblar res.locals.user desde JWT en cookie (para templates) ---
-const JWT_SECRET = process.env.JWT_SECRET || "supersecreto";
+const JWT_SECRET = config.JWT_SECRET
 app.use(async (req, res, next) => {
   try {
     const token = req.cookies && req.cookies.token;
@@ -133,13 +136,10 @@ app.use(async (req, res, next) => {
 });
 // --- fin middleware ---
 
-app.use(cartCount); // Middleware para contar productos en el carrito
+// Logger
+app.use(addLogger);
 
-// Middleware global: pasar info del admin a las vistas
-app.use((req, res, next) => {
-  res.locals.isAdmin = req.session.isAdmin || false;
-  next();
-});
+app.use(cartCount); // Middleware para contar productos en el carrito
 
 // Rutas
 app.use("/", viewsRouter); // Página de inicio
@@ -155,9 +155,6 @@ app.use("/api/sessions", sessionsRouter);
 
 // Ruta de comentarios y reseñas
 app.use("/api/reviews", reviewsRouter);
-
-// Logger
-app.use(addLogger);
 
 // Ruta de errores ⛔
 app.use(errorHandler);
@@ -229,7 +226,7 @@ io.on("connection", async (socket) => {
 // });
 
 // Iniciar servidor solo si NO estamos en testing
-if (process.env.NODE_ENV !== "test") {
+if (config.NODE_ENV !== "test") {
   httpServer.listen(PORT, () => {
     console.log(`🚀 Servidor escuchando en http://localhost:${PORT}`);
   });

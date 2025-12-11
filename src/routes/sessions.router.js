@@ -11,7 +11,9 @@ import { EErrors } from "../services/errors/error-enum.js";
 import { generateUserErrorInfo } from "../services/errors/messages/user-error.message.js";
 
 // Logger
-import logger from "../logger/logger.js";
+import LoggerSingleton from "../logger/logger.js";
+
+const logger = LoggerSingleton.getInstance().logger;
 
 const router = Router();
 const JWT_SECRET = process.env.JWT_SECRET || "supersecreto";
@@ -19,7 +21,7 @@ const JWT_SECRET = process.env.JWT_SECRET || "supersecreto";
 // Registro de usuario
 router.post("/register", async (req, res, next) => {
   logger.info("❤️‍🔥 POST /register - Intentando registrar usuario.");
-  logger.debug(`Datos recibidos: ${JSON.stringify(req.body)}}`);
+  logger.debug(`Datos recibidos: ${JSON.stringify(req.body)}`);
 
   try {
     const { first_name, last_name, email, age, password } = req.body;

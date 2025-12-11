@@ -21,28 +21,6 @@ const customLevels = {
 
 winston.addColors(customLevels.colors);
 
-// const logger = winston.createLogger({
-//   levels: customLevels.levels,
-//   transports: [
-//     new winston.transports.Console({
-//       level: process.env.NODE_ENV === "production" ? "info" : "debug",
-//       format: winston.format.combine(
-//         winston.format.colorize({ all: true }),
-//         winston.format.simple()
-//       ),
-//     }),
-
-//     new winston.transports.File({
-//       filename: "./logs/errors.log",
-//       level: "error",
-//       format: winston.format.combine(
-//         winston.format.timestamp(),
-//         winston.format.json()
-//       ),
-//     }),
-//   ],
-// });
-
 class LoggerSingleton {
   static #instance = null;
 
@@ -53,13 +31,19 @@ class LoggerSingleton {
 
     this.logger = winston.createLogger({
       levels: customLevels.levels,
+      level: "debug",
+
+      format: winston.format.combine(
+        winston.format.colorize({ all: true }),
+        winston.format.timestamp(),
+        winston.format.printf(({ level, message, timestamp }) => {
+          return `[${timestamp}] ${level}: ${message}`;
+        })
+      ),
+
       transports: [
-        new windston.transports.Console({
+        new winston.transports.Console({
           level: process.env.NODE_ENV === "production" ? "info" : "debug",
-          format: winston.format.combine(
-            winston.format.colorize({ all: true }),
-            winston.format.simple()
-          ),
         }),
 
         new winston.transports.File({
