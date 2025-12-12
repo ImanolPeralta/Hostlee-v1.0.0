@@ -28,6 +28,7 @@ import sessionsRouter from "./routes/sessions.router.js";
 import reviewsRouter from "./routes/reviews.router.js";
 import { errorHandler } from "./services/errors/middlewares/error-middleware.js";
 import { addLogger } from "./middleware/logger.middleware.js";
+import mocksRouter from "./routes/mocks.router.js";
 
 const app = express();
 const httpServer = createServer(app);
@@ -146,6 +147,9 @@ app.use("/", viewsRouter); // Página de inicio
 app.use("/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/admin", adminAuthRouter); // Rutas de autenticación del admin
+
+// Mocking rutes
+app.use("/api/mocks", mocksRouter);
 
 // Perfil de usuario
 app.use("/", profileRouter);
