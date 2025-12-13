@@ -1,16 +1,20 @@
-FROM node:18-alpine
+# Definition of the base image
+FROM node:18
 
+#Set the working directory inside the container
 WORKDIR /app
 
+# Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
 
-RUN npm install --omit=dev
+# Install the dependencies
+RUN npm install
 
+# Copy the rest of the application code to the working directory
 COPY . .
 
-ENV NODE_ENV=production
-ENV PORT=8080
-
+# Expose the port the app runs on
 EXPOSE 8080
 
-CMD ["node", "src/app.js"]
+# Command to run the application
+CMD ["npm", "start"]

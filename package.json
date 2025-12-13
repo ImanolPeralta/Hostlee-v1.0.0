@@ -4,7 +4,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "cross-env NODE_ENV=test mocha \"test/**/*.test.js\" --timeout 5000"
+    "test": "cross-env NODE_ENV=test mocha \"test/**/*.test.js\" --timeout 5000",
+    "start": "node src/app.js"
   },
   "test": "mocha --exit --recursive test",
   "test:watch": "mocha --watch --recursive test",

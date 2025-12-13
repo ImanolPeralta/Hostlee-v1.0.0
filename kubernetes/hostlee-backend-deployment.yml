@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hostlee-backend-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: hostlee-backend
+  template:
+    metadata:
+      labels:
+        app: hostlee-backend
+    spec:
+      containers:
+        - name: hostlee-backend
+          image: imanolpdev/hostlee-backend:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: PORT
+              value: "8080"
+            - name: MONGO_URI
+              value: mongodb://hostlee-mongo-service:27017/hostlee
+            - name: JWT_SECRET
+              value: your_jwt_secret
+            - name: NODE_ENV
+              value: production
+          imagePullPolicy: Always

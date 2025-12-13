@@ -1,19 +1,30 @@
-version: '3.8'
+version: "3"
 
 services:
-  hostlee:
-    build: .
-    image: tuusuario/hostlee:1.0.0
+  hostlee-backend:
+    image: imanolpdev/hostlee-backend
+    container_name: hostlee-backend
     ports:
       - "8080:8080"
     environment:
-      - MONGO_URI=mongodb://mongo:27017/hostlee
-      - NODE_ENV=production
+      PORT: 8080
+      MONGO_URI: mongodb://hostlee-mongo:27017/hostlee
+      MONGO_TEST_URI: mongodb://hostlee-mongo:27017/hostlee_test
+      JWT_SECRET: your_jwt_secret
+      NODE_ENV: production
     depends_on:
-      - mongo
+      - hostlee-mongo
 
-  mongo:
-    image: mongo:6
-    restart: always
+  hostlee-mongo:
+    image: mongo:4.2
+    container_name: hostlee-mongo
+    environment:
+      MONGO_DATA_DIR: /data/db
+      MONGO_LOG_DIR: /dev/log
+    volumes:
+      - hostlee-mongo-volume:/data/db
     ports:
       - "27017:27017"
+
+volumes:
+  hostlee-mongo-volume:

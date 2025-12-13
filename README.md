@@ -54,86 +54,100 @@ Permite a los usuarios registrarse, gestionar su perfil, subir fotos, reservar h
 ## 🧩 Estructura del Proyecto
 
 ```
-┣ 📂config
-┃ ┗ 📜passport.js
-┣ 📂data
-┃ ┣ 📂models
-┃ ┃ ┣ 📜Cart.js
-┃ ┃ ┣ 📜Product.js
-┃ ┃ ┣ 📜ticket.model.js
-┃ ┃ ┗ 📜user.model.js
-┃ ┣ 📜carrito.json
-┃ ┣ 📜db.js
-┃ ┗ 📜productos.json
-┣ 📂dtos
-┃ ┗ 📜user.dto.js
-┣ 📂managers
-┃ ┣ 📜CartManager.js
-┃ ┣ 📜ProductManager.js
-┃ ┗ 📜TicketManager.js
-┣ 📂middleware
-┃ ┣ 📜cartCount.js
-┃ ┣ 📜cartCount.js.bak
-┃ ┣ 📜isAdmin.js
-┃ ┗ 📜role.middleware.js
-┣ 📂public
-┃ ┣ 📂css
-┃ ┃ ┣ 📜styles.css
-┃ ┃ ┗ 📜styles.css.bak
-┃ ┣ 📂img
-┃ ┃ ┣ 📜24-7.png
-┃ ┃ ┣ 📜admin-bg.jpg
-┃ ┃ ┣ 📜hero-about.png
-┃ ┃ ┣ 📜hero.png
-┃ ┃ ┣ 📜login-bg.jpg
-┃ ┃ ┣ 📜logo.png
-┃ ┃ ┣ 📜mejor-precio.png
-┃ ┃ ┣ 📜propiedades-verificadas.png
-┃ ┃ ┗ 📜register-bg.jpg
-┃ ┣ 📂js
-┃ ┃ ┣ 📜cart.js
-┃ ┃ ┣ 📜cart.js.bak
-┃ ┃ ┗ 📜navbar.js
-┃ ┗ 📂uploads
-┃   ┗ 📂avatars
-┣ 📂repositories
-┃ ┣ 📜cart.repository.js
-┃ ┣ 📜product.repository.js
-┃ ┗ 📜ticket.repository.js
-┣ 📂routes
-┃ ┣ 📜adminAuth.js
-┃ ┣ 📜adminPanel.js
-┃ ┣ 📜carts.router.js
-┃ ┣ 📜carts.router.js.bak
-┃ ┣ 📜products.router.js
-┃ ┣ 📜profile.router.js
-┃ ┣ 📜sessions.router.js
-┃ ┗ 📜views.router.js
-┣ 📂services
-┃ ┗ 📜carts.services.js
-┣ 📂views
-┃ ┣ 📂layouts
-┃ ┃ ┣ 📜main.handlebars
-┃ ┃ ┗ 📜main.handlebars.bak
-┃ ┣ 📂partials
-┃ ┃ ┣ 📜footer.handlebars
-┃ ┃ ┣ 📜navbar.handlebars
-┃ ┃ ┗ 📜navbar.handlebars.bak
-┃ ┣ 📜about.handlebars
-┃ ┣ 📜admin.handlebars
-┃ ┣ 📜adminLogin.handlebars
-┃ ┣ 📜cart.handlebars
-┃ ┣ 📜contact.handlebars
-┃ ┣ 📜departamentos.handlebars
-┃ ┣ 📜faq.handlebars
-┃ ┣ 📜home.handlebars
-┃ ┣ 📜login.handlebars
-┃ ┣ 📜productDetail.handlebars
-┃ ┣ 📜profile.handlebars
-┃ ┗ 📜register.handlebars
-┣ 📜app.js
-┣ 📜app.js.bak
-┗ 📜utils.js
+/
+├── logs/                         # Registros de la aplicación
+│   └── errors.log
+|
+├── src/                          # CÓDIGO FUENTE DE LA APLICACIÓN
+│   ├── app.js                    # Punto de entrada principal de la aplicación
+│   ├── config/                   # Configuración global y módulos
+│   │   ├── config.js             # Variables de entorno y configuración
+│   │   └── passport.js           # Estrategias de autenticación (JWT, local, etc.)
+│   │
+│   ├── controllers/              # Lógica para manejar las peticiones (La 'C' en MVC)
+│   │   ├── bookings.controller.js
+│   │   └── users.controller.js
+│   │
+│   ├── data/                     # Lógica de persistencia de bajo nivel
+│   │   ├── models/               # Definiciones de esquemas/modelos (e.g., Mongoose/Sequelize)
+│   │   │   ├── Cart.js
+│   │   │   ├── Product.js
+│   │   │   └── ... (review, ticket, user)
+│   │   ├── mongo.singleton.js    # Conexión centralizada a la base de datos
+│   │   └── productos.json        # Datos de prueba/semilla (seed)
+│   │
+│   ├── docs/                     # Documentación de la API (Swagger/OpenAPI)
+│   │   ├── swagger.js
+│   │   └── users.yaml
+│   │
+│   ├── dtos/                     # Data Transfer Objects (Transformación de datos)
+│   │   └── user.dto.js           # Estandarización de la estructura de datos
+│   │
+│   ├── logger/                   # Configuración del sistema de logging
+│   │   └── logger.js
+│   │
+│   ├── managers/                 # (Patrón obsoleto/alternativo) Lógica de persistencia o negocio
+│   │   ├── CartManager.js
+│   │   ├── ProductManager.js
+│   │   └── TicketManager.js
+│   │
+│   ├── middleware/               # Funciones que se ejecutan antes de los controladores
+│   │   ├── isAdmin.js
+│   │   ├── isAuthenticated.js
+│   │   ├── logger.middleware.js
+│   │   └── multer.js             # Middleware para manejo de archivos
+│   │
+│   ├── mocks/                    # Archivos para generar datos de prueba (mocking)
+│   │   └── ... (cart, product, reviews, user)
+│   │
+│   ├── public/                   # Archivos estáticos servidos directamente por el servidor
+│   │   ├── css/                  # Hojas de estilo
+│   │   │   └── styles.css
+│   │   ├── img/                  # Imágenes de la aplicación (logo, banners, fondos)
+│   │   │   └── ... (imágenes de la UI)
+│   │   ├── js/                   # Scripts de frontend (lógica del lado del cliente)
+│   │   │   └── ... (cart.js, navbar.js)
+│   │   └── uploads/              # Archivos subidos por los usuarios (Avatares, imágenes de productos)
+│   │
+│   ├── repositories/             # Abstracción de la capa de datos (Patrón Repository)
+│   │   ├── cart.repository.js
+│   │   ├── product.repository.js
+│   │   └── ticket.repository.js
+│   │
+│   ├── routes/                   # Definición de las rutas de la API y Vistas
+│   │   ├── adminPanel.js         # Rutas específicas para el panel de administración
+│   │   ├── bookings.router.js
+│   │   ├── carts.router.js
+│   │   ├── products.router.js
+│   │   └── ... (profile, sessions, users, views)
+│   │
+│   ├── services/                 # Lógica de Negocio (donde reside la mayor parte de la lógica)
+│   │   ├── errors/               # Manejo centralizado de errores personalizados
+│   │   │   ├── messages/
+│   │   │   ├── middlewares/
+│   │   │   └── customError.js
+│   │   ├── bookings.service.js
+│   │   ├── carts.services.js
+│   │   └── users.service.js
+│   │
+│   ├── views/                    # Plantillas de la interfaz de usuario (Handlebars, Pug, etc.)
+│   │   ├── layouts/
+│   │   ├── partials/             # Componentes reutilizables (navbar, footer)
+│   │   └── ... (home, login, profile, cart, etc. handlebars)
+│   │
+│   └── utils.js                  # Funciones auxiliares/helpers
+|
+├── test/                         # Pruebas automatizadas (Unitarias, Integración, End-to-End)
+│   ├── cart.test.js
+│   ├── product.test.js
+│   └── ... (reviews, users)
+|
+├── .env                          # Variables de entorno (EXCLUIDO en .gitignore)
+├── .gitignore                    # Archivos y carpetas a ignorar por Git
+├── docker-compose.yml            # Orquestación de contenedores
+├── Dockerfile                    # Instrucciones para construir la imagen del contenedor
+├── package.json                  # Metadatos y dependencias de Node.js
+└── README.md                     # Documentación principal del proyecto
 ```
 
 ---
@@ -208,18 +222,119 @@ Permite a los usuarios registrarse, gestionar su perfil, subir fotos, reservar h
 
 ---
 
+## 🐋 Docker & Docker Compose
+
+Este proyecto incluye un entorno completamente contenedorizado con
+Node.js y MongoDB, utilizando Docker Compose.\
+No necesitas instalar Node, Mongo ni dependencias: todo corre dentro de
+los contenedores.
+
+------------------------------------------------------------------------
+
+### 🚀 Ejecutar con Docker Compose (recomendado)
+
+### 1️⃣ Levantar el entorno
+
+``` bash
+docker compose up --build
+```
+
+Esto realizará:
+
+-   Construcción de la imagen del backend\
+-   Creación del contenedor de MongoDB\
+-   Conexión entre servicios dentro de la red interna\
+-   Exposición del backend en:\
+    👉 http://localhost:8080
+
+### 2️⃣ Ejecutar en segundo plano
+
+``` bash
+docker compose up -d
+```
+
+### 3️⃣ Detener los contenedores
+
+``` bash
+docker compose down
+```
+
+### 4️⃣ Detener y eliminar volúmenes (incluye datos de MongoDB)
+
+``` bash
+docker compose down -v
+```
+
+------------------------------------------------------------------------
+
+## 🔧 Variables de entorno en Docker
+
+Docker Compose establece automáticamente las variables necesarias.
+
+Tu backend se conecta al contenedor de Mongo en:
+
+    MONGO_URI=mongodb://hostlee-mongo:27017/hostlee
+
+**Importante:** Dentro de Docker no se usa `localhost`.\
+El servicio se llama **hostlee-mongo** gracias a la red interna creada
+por Compose.
+
+------------------------------------------------------------------------
+
+## 🐋 Imagen Docker publicada en Docker Hub
+
+Si solo deseas ejecutar la imagen sin Docker Compose, puedes hacerlo
+manualmente:
+
+🔗 Imagen en Docker Hub:\
+(https://hub.docker.com/r/imanolpdev/hostlee-backend)
+
+### Descargar la imagen
+
+``` bash
+docker pull imanolpdev/hostlee-backend:latest
+```
+
+### Ejecutar el contenedor manualmente
+
+⚠️ *Solo recomendable si no usarás Mongo en Docker (tendrías que tener
+Mongo instalado localmente).*
+
+``` bash
+docker run -p 8080:8080 --env-file .env imanolpdev/hostlee-backend:latest
+```
+
+------------------------------------------------------------------------
+
+## 🛠️ Construir y publicar manualmente la imagen
+
+### Construir la imagen
+
+``` bash
+docker build -t hostlee-backend .
+```
+
+### Publicarla en Docker Hub
+
+``` bash
+docker tag hostlee-backend imanolpdev/hostlee-backend:latest
+docker push imanolpdev/hostlee-backend:latest
+```
+
+---
+
 ## 👨‍💻 Autor
 
 **Imanol Augusto Peralta**  
-📧 [imanolaugusto18@gmail.com](mailto:imanolaugusto18@gmail.com)  
-🔗 [LinkedIn](https://www.linkedin.com/in/imanol-augusto-peralta)  
+📧 [imanolaugusto18@gmail.com](mailto:imanolaugusto18@gmail.com)
+🔗 [LinkedIn](https://www.linkedin.com/in/imanol-augusto-peralta)
 💻 [GitHub](https://github.com/ImanolPeralta)
 
 ---
 
 ## 📝 Notas Finales
 
-- Proyecto desarrollado para el curso **Programación Backend II - Arquitectura Backend (Coderhouse)**.
+- Proyecto final desarrollado para los cursos **Programación Backend I / II / III**.
 - Implementa manejo de sesiones, roles y persistencia real en MongoDB.
 - Incluye sistema de subida y visualización de imágenes.
 - Estructura escalable y modular, pensada para futuras ampliaciones (chat, reservas reales, etc.).

@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hostlee-mongo-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hostlee-mongo
+  template:
+    metadata:
+      labels:
+        app: hostlee-mongo
+    spec:
+      containers:
+        - name: mongo
+          image: mongo:4.2
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: mongo-storage
+              mountPath: /data/db
+      volumes:
+        - name: mongo-storage
+          emptyDir: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hostlee-mongo-service
+spec:
+  selector:
+    app: hostlee-mongo
+  ports:
+    - port: 27017
+      targetPort: 27017
+  type: ClusterIP
