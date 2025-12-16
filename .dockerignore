@@ -1,0 +1,28 @@
+# Local dependences
+node_modules/
+
+# Version control
+.git
+.gitignore
+
+# Logs
+npm-debug.log
+
+# Environment variables
+.env
+.env.*
+
+# Docker files
+docker.compose.yml
+kubernetes/
+
+# Logs
+logs/
+errors.log
+npm-debug.log
+
+# Tests
+test/
+
+# Backups
+*.bak
